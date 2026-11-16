@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DOS — 1v1 Card Arena</title>
+  <link rel="icon" type="image/png" href="images/icon.png" />
+  <link rel="shortcut icon" href="images/icon.png" />
+  <link rel="apple-touch-icon" href="images/icon.png" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Control Bar -->
+    <header class="topbar">
+      <div class="brand">
+        <img src="images/uno-dos-logo.png" alt="UNO DOS 1v1 Card Arena" class="brand-logo-img" />
+      </div>
+
+      <div class="controls-group">
+        <label class="select-wrap" title="Bot Intelligence">
+          <span>Bot:</span>
+          <select id="difficultySelect">
+            <option value="casual" selected>Casual</option>
+            <option value="smart">Smart</option>
+            <option value="ruthless">Ruthless</option>
+          </select>
+        </label>
+
+        <label class="select-wrap" title="Match Length">
+          <span>Goal:</span>
+          <select id="matchGoalSelect">
+            <option value="single">1 Round</option>
+            <option value="200" selected>First to 200 pts</option>
+          </select>
+        </label>
+
+        <label class="select-wrap" title="Table Background Color">
+          <span>Background:</span>
+          <select id="bgThemeSelect" aria-label="Table Background Color">
+            <option value="emerald" selected>🌲 Emerald Felt</option>
+            <option value="liquid-glass">🧊 Liquid Glass</option>
+            <option value="midnight">🌊 Midnight Blue</option>
+            <option value="crimson">🍷 Royal Crimson</option>
+            <option value="amethyst">🔮 Deep Amethyst</option>
+            <option value="charcoal">🎱 Charcoal Slate</option>
+            <option value="amber">🪵 Warm Mahogany</option>
+            <option value="ocean">🐬 Teal Ocean</option>
+            <option value="pitch-black">🌑 OLED Black</option>
+            <option value="custom">🎨 Custom Color...</option>
+          </select>
+          <div class="custom-color-box hidden" id="customColorBox" title="Custom color code (e.g. #0F3B2E, #2563EB)">
+            <input type="color" id="customColorInput" value="#0f3b2e" class="custom-color-swatch" title="Pick color visually" aria-label="Custom background color picker" />
+            <input type="text" id="customColorText" value="#0F3B2E" placeholder="#0F3B2E" maxlength="16" class="custom-color-input" title="Type or paste color code (e.g. #0F3B2E, 2563EB, teal)" aria-label="Custom color code" spellcheck="false" />
+          </div>
+        </label>
+
+        <button id="soundToggleBtn" class="icon-btn" title="Toggle Sound Effects" aria-pressed="true">
+          🔊
+        </button>
+        <button id="rulesBtn" class="ghost-btn">Rules</button>
+        <button id="newGameBtn" class="primary-btn">New Game</button>
+      </div>
+    </header>
+
+    <!-- Score & Status Strip -->
+    <section class="status-strip">
+      <div class="player-pill bot-pill" id="botScorePill">
+        <div class="avatar bot-avatar">🤖</div>
+        <div class="pill-info">
+          <div class="pill-name">
+            <span id="botName">DOS-Bot</span>
+            <span class="turn-chip hidden" id="botTurnChip">Thinking...</span>
+          </div>
+          <div class="pill-stats">
+            <span>Cards: <strong id="botCardCount">7</strong></span>
+            <span>•</span>
+            <span>Score: <strong id="botTotalScore">0</strong><span id="goalSuffixBot">/200</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="center-banner">
+        <div class="turn-banner" id="turnBanner">Your Turn</div>
+        <div class="last-action" id="lastActionText">Select 1 or 2 cards to match a Center Row card, or Draw.</div>
+      </div>
+
+      <div class="player-pill human-pill" id="humanScorePill">
+        <div class="pill-info right">
+          <div class="pill-name">
+            <span class="turn-chip" id="humanTurnChip">Your Turn</span>
+            <span>You</span>
+          </div>
+          <div class="pill-stats">
+            <span>Score: <strong id="humanTotalScore">0</strong><span id="goalSuffixHuman">/200</span></span>
+            <span>•</span>
+            <span>Cards: <strong id="humanCardCount">7</strong></span>
+          </div>
+        </div>
+        <div class="avatar human-avatar">🧑</div>
+      </div>
+    </section>
+
+    <!-- Main Felt Table -->
+    <main class="table-arena">
+      <!-- Bot Hand Zone -->
+      <section class="zone bot-zone">
+        <div class="zone-header">
+          <span class="zone-label">Bot's Hand</span>
+          <div class="bot-alerts">
+            <span id="botShoutBadge" class="shout-badge hidden">DOS!</span>
+            <button id="catchBotBtn" class="catch-btn hidden">🚨 Catch Bot! (+2)</button>
+          </div>
+        </div>
+        <div id="botHand" class="hand-row bot-hand" aria-label="Bot cards"></div>
+      </section>
+
+      <!-- Center Table Zone -->
+      <section class="zone center-zone">
+        <div class="center-table-layout">
+          <!-- Draw Pile -->
+          <div class="pile-block">
+            <div class="pile-title">Draw Pile</div>
+            <button id="drawPileBtn" class="card card-back draw-pile-card" title="Draw a card">
+              <div class="card-back-inner">
+                <span class="back-logo" id="deckLogoText">DOS</span>
+              </div>
+              <span class="pile-count" id="drawCountBadge">92</span>
+            </button>
+            <div class="pile-sub" id="drawPileHint">Click to draw</div>
+          </div>
+
+          <!-- Center Row -->
+          <div class="center-piles-wrap">
+            <div class="pile-title" id="centerAreaTitle">Center Row (Match by Number or Sum)</div>
+            <div id="centerRow" class="center-row"></div>
+          </div>
+        </div>
+
+        <!-- Turn Action Bar -->
+        <div class="action-bar" id="actionBar">
+          <div class="selection-summary" id="selectionSummary">
+            Click a card in your hand to start.
+          </div>
+          <div class="action-buttons">
+            <button id="undoStageBtn" class="ghost-btn hidden" title="Undo staged matches from this turn">
+              ↩ Undo
+            </button>
+            <button id="shoutDosBtn" class="dos-shout-btn" disabled title="Call DOS when at 2 cards">
+              DOS!
+            </button>
+            <button id="endTurnBtn" class="primary-btn" disabled>
+              End Turn
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Player Hand Zone -->
+      <section class="zone player-zone">
+        <div class="zone-header">
+          <div class="player-zone-left">
+            <span class="zone-label">Your Hand</span>
+            <span id="bonusBanner" class="bonus-banner hidden">
+              ✨ Color Match Bonus! Click a card to add to the Center Row.
+            </span>
+          </div>
+          <div class="player-zone-tools">
+            <button id="clearSelectionBtn" class="mini-btn hidden">Clear Selection</button>
+            <button id="sortHandBtn" class="mini-btn" title="Sort your hand by color and number">⇅ Sort Hand</button>
+          </div>
+        </div>
+        <div id="playerHand" class="hand-row player-hand" aria-label="Your cards"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Wild Number Picker Modal (DOS Wild # placed in Center Row) -->
+  <div id="wildNumModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="wildNumTitle">
+    <div class="modal-card compact-modal">
+      <h2 id="wildNumTitle">Choose Wild # Value</h2>
+      <p>Pick what number (1–10) this Wild # card represents in the Center Row:</p>
+      <div class="num-grid" id="wildNumGrid"></div>
+    </div>
+  </div>
+
+  <!-- Round / Match Over Modal -->
+  <div id="roundOverModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="roundOverTitle">
+    <div class="modal-card result-modal">
+      <div class="result-emoji" id="resultEmoji">🏆</div>
+      <h2 id="roundOverTitle">You Won the Round!</h2>
+      <p id="roundOverSubtitle">You cleared your hand first.</p>
+      <div class="score-breakdown" id="scoreBreakdown"></div>
+      <div class="modal-actions">
+        <button id="nextRoundBtn" class="primary-btn large-btn">Next Round</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- How to Play Rules Modal -->
+  <div id="rulesModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+    <div class="modal-card rules-modal">
+      <div class="modal-header">
+        <h2 id="rulesTitle"><img src="images/icon.png" alt="" class="modal-title-icon" /> How to Play DOS</h2>
+        <button id="closeRulesBtn" class="icon-btn" aria-label="Close rules">✕</button>
+      </div>
+      <div class="rules-body" id="rulesContentDos">
+        <h3>Objective</h3>
+        <p>Be the first player to empty your hand. In <strong>200-pt Match</strong> mode, the round winner scores the point value of cards left in the opponent's hand until someone reaches 200 points.</p>
+        <h3>Matching the Center Row</h3>
+        <ul>
+          <li>The Center Row starts with <strong>2 piles</strong>. You can match <strong>one or multiple</strong> Center Row piles on your turn (each pile at most once).</li>
+          <li><strong>Single Match:</strong> Play <strong>1 card</strong> matching the <em>number</em> of a Center Row card (any color).</li>
+          <li><strong>Double Match:</strong> Play <strong>2 cards</strong> whose numbers <em>add up</em> to the Center Row card's number (e.g., 3 + 4 = 7).</li>
+          <li><strong>If you can't match:</strong> Click the <strong>Draw Pile</strong> to draw 1 card. You may immediately match with it, or click <strong>End Turn</strong>.</li>
+        </ul>
+        <h3>Color Match Bonuses</h3>
+        <ul>
+          <li><strong>Single Color Match:</strong> Your played card also matches the Center card's <em>color</em> → at the end of your turn, place <strong>1 extra card</strong> from your hand into the Center Row!</li>
+          <li><strong>Double Color Match:</strong> <em>Both</em> cards in a Double Match match the Center card's <em>color</em> → place <strong>1 extra card</strong> into the Center Row <strong>AND</strong> the Bot draws 1 penalty card!</li>
+        </ul>
+        <h3>Special Wild Cards</h3>
+        <ul>
+          <li><strong>Wild # (Colored):</strong> Counts as <em>any number 1–10</em> in its color (20 pts).</li>
+          <li><strong>Wild DOS (Rainbow 2):</strong> Counts as the number <strong>2</strong> in <em>any color</em>, triggering Color Match Bonuses! (50 pts).</li>
+        </ul>
+        <h3>Calling "DOS!"</h3>
+        <p>When you are down to <strong>2 cards</strong>, press the glowing <strong>DOS!</strong> button before ending your turn—or the Bot can catch you for +2 penalty cards! Watch closely: if the Bot forgets to call DOS, hit <strong>Catch Bot!</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Corner Attribution -->
+  <div class="corner-credit">
+    Made by <span class="credit-highlight">Antigravity</span> &amp; <span class="credit-highlight">SohamRoy20</span>
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
