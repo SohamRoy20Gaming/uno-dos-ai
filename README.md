@@ -73,7 +73,7 @@ When you are down to **2 cards** in your hand, you **must** press the glowing **
 ## 📂 Project Structure
 
 ```
-Uno Dos/
+uno-dos-ai/
 ├── index.html            # Main game markup and UI layout
 ├── README.md             # Project documentation and rules
 ├── css/
