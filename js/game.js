@@ -1527,8 +1527,10 @@
         if (dom.customColorInput) dom.customColorInput.value = parsed;
         if (dom.customColorText) {
           dom.customColorText.value = parsed.toUpperCase();
-          dom.customColorText.focus();
-          dom.customColorText.select();
+          setTimeout(() => {
+            dom.customColorText.focus();
+            dom.customColorText.select();
+          }, 60);
         }
         applyBgTheme("custom", parsed);
       } else {
@@ -1778,7 +1780,9 @@
               select.dispatchEvent(new Event("change", { bubbles: true }));
             }
             closeMenu();
-            trigger.focus();
+            if (opt.value !== "custom") {
+              trigger.focus();
+            }
             if (sfx.enabled) sfx.click();
           });
 
@@ -1822,7 +1826,7 @@
       });
 
       wrap.addEventListener("click", (e) => {
-        if (e.target.closest(".custom-color-box") || e.target.closest(".custom-select-dropdown")) return;
+        if (e.target.closest(".custom-select-dropdown")) return;
         if (e.target !== trigger && !trigger.contains(e.target)) {
           e.preventDefault();
           trigger.click();
