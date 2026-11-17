@@ -56,7 +56,7 @@ When you are down to **2 cards** in your hand, you **must** press the glowing **
     - 🐬 **Teal Ocean**
     - 🌑 **OLED Black**
   - **Custom Color Support**: Visual color picker + hex/name text box (`#0F3B2E`, `teal`, `navy`) with automatic shade derivation.
-  - **Dynamic Theme-Matched Buttons**: Action buttons (`New Game`, `End Turn`, `Next Round`) automatically adopt gradients, borders, and glow shadows matching the active theme.
+  - **Dynamic Theme-Matched Buttons & Dropdowns**: Action buttons (`New Game`, `End Turn`, `Next Round`) and topbar dropdown menus (`Bot`, `Goal`, `Background`) automatically adopt gradients, borders, backdrops, and glow shadows matching the active theme.
   - **Persistence**: Remembers your preferred background theme, difficulty, and sound settings in `localStorage`.
 
 - **🔊 Pure Web Audio Synth**:

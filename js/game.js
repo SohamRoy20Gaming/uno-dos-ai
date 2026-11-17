@@ -1462,6 +1462,30 @@
         document.body.style.setProperty("--btn-primary-text", btnText);
         document.body.style.setProperty("--btn-primary-shadow", btnShadow);
         document.body.style.setProperty("--btn-primary-border", btnBorder);
+
+        const ddBg = `rgba(${Math.round(c.r * 0.2)}, ${Math.round(c.g * 0.2)}, ${Math.round(c.b * 0.2)}, 0.95)`;
+        const ddBorder = `rgba(${Math.min(255, c.r + 65)}, ${Math.min(255, c.g + 65)}, ${Math.min(255, c.b + 65)}, 0.45)`;
+        const ddAccent = `rgb(${Math.min(255, c.r + 80)}, ${Math.min(255, c.g + 80)}, ${Math.min(255, c.b + 80)})`;
+        const ddHover = `rgba(${c.r}, ${c.g}, ${c.b}, 0.22)`;
+        const ddActive = `rgba(${c.r}, ${c.g}, ${c.b}, 0.38)`;
+        const ddShadow = `0 14px 34px rgba(${Math.round(c.r * 0.12)}, ${Math.round(c.g * 0.12)}, ${Math.round(c.b * 0.12)}, 0.8)`;
+        const ddTriggerBg = `rgba(${Math.round(c.r * 0.25)}, ${Math.round(c.g * 0.25)}, ${Math.round(c.b * 0.25)}, 0.78)`;
+        const ddTriggerHover = `rgba(${c.r}, ${c.g}, ${c.b}, 0.18)`;
+        const ddFocus = `rgba(${Math.min(255, c.r + 60)}, ${Math.min(255, c.g + 60)}, ${Math.min(255, c.b + 60)}, 0.35)`;
+
+        document.body.style.setProperty("--dropdown-bg", ddBg);
+        document.body.style.setProperty("--dropdown-border", ddBorder);
+        document.body.style.setProperty("--dropdown-text", "#ffffff");
+        document.body.style.setProperty("--dropdown-accent", ddAccent);
+        document.body.style.setProperty("--dropdown-item-hover", ddHover);
+        document.body.style.setProperty("--dropdown-item-active", ddActive);
+        document.body.style.setProperty("--dropdown-shadow", ddShadow);
+        document.body.style.setProperty("--dropdown-trigger-bg", ddTriggerBg);
+        document.body.style.setProperty("--dropdown-trigger-hover-bg", ddTriggerHover);
+        document.body.style.setProperty("--dropdown-focus-ring", ddFocus);
+
+        const customDot = document.querySelector('.custom-select-option[data-value="custom"] .theme-swatch-dot');
+        if (customDot) customDot.style.background = customHex;
       }
     } else {
       document.body.style.removeProperty("--felt-center");
@@ -1474,6 +1498,16 @@
       document.body.style.removeProperty("--btn-primary-text");
       document.body.style.removeProperty("--btn-primary-shadow");
       document.body.style.removeProperty("--btn-primary-border");
+      document.body.style.removeProperty("--dropdown-bg");
+      document.body.style.removeProperty("--dropdown-border");
+      document.body.style.removeProperty("--dropdown-text");
+      document.body.style.removeProperty("--dropdown-accent");
+      document.body.style.removeProperty("--dropdown-item-hover");
+      document.body.style.removeProperty("--dropdown-item-active");
+      document.body.style.removeProperty("--dropdown-shadow");
+      document.body.style.removeProperty("--dropdown-trigger-bg");
+      document.body.style.removeProperty("--dropdown-trigger-hover-bg");
+      document.body.style.removeProperty("--dropdown-focus-ring");
       document.body.setAttribute("data-theme", theme);
     }
 
@@ -1641,9 +1675,225 @@
     if (e.target === dom.rulesModal) dom.rulesModal.classList.add("hidden");
   });
 
+  // Custom Dropdowns matching Theme
+  const THEME_SWATCHES = {
+    emerald: "#10b981",
+    "liquid-glass": "linear-gradient(135deg, #38bdf8, #818cf8)",
+    midnight: "#3b82f6",
+    crimson: "#f43f5e",
+    amethyst: "#a855f7",
+    charcoal: "#94a3b8",
+    amber: "#f59e0b",
+    ocean: "#06b6d4",
+    "pitch-black": "#0e0e0e",
+    custom: "conic-gradient(#f43f5e, #eab308, #22c55e, #3b82f6, #a855f7)",
+  };
+
+  const CHEVRON_SVG = `<svg class="custom-select-chevron" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+
+  function closeAllDropdowns(exceptWrap = null) {
+    document.querySelectorAll(".select-wrap.open").forEach((wrap) => {
+      if (wrap !== exceptWrap) {
+        wrap.classList.remove("open");
+        const dd = wrap.querySelector(".custom-select-dropdown");
+        if (dd) dd.classList.add("hidden");
+        const tr = wrap.querySelector(".custom-select-trigger");
+        if (tr) tr.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
+  function initCustomSelects() {
+    const selectWraps = document.querySelectorAll(".select-wrap");
+
+    selectWraps.forEach((wrap) => {
+      const select = wrap.querySelector("select");
+      if (!select || wrap.dataset.customSelectInit === "true") return;
+      wrap.dataset.customSelectInit = "true";
+
+      // Hide native select visually while keeping it functional for change events
+      select.classList.add("custom-select-hidden");
+      select.setAttribute("tabindex", "-1");
+      select.setAttribute("aria-hidden", "true");
+
+      const isThemeSelect = select.id === "bgThemeSelect";
+
+      // Trigger button
+      const trigger = document.createElement("button");
+      trigger.type = "button";
+      trigger.className = "custom-select-trigger";
+      trigger.setAttribute("aria-haspopup", "listbox");
+      trigger.setAttribute("aria-expanded", "false");
+      trigger.setAttribute(
+        "aria-label",
+        select.getAttribute("aria-label") || wrap.getAttribute("title") || "Select option"
+      );
+
+      const valueSpan = document.createElement("span");
+      valueSpan.className = "custom-select-value";
+      const initialText = select.options[select.selectedIndex]?.text || "";
+      valueSpan.textContent = initialText;
+
+      trigger.appendChild(valueSpan);
+      trigger.insertAdjacentHTML("beforeend", CHEVRON_SVG);
+
+      wrap.insertBefore(trigger, select.nextSibling);
+
+      // Dropdown menu
+      const dropdown = document.createElement("div");
+      dropdown.className = "custom-select-dropdown hidden";
+      dropdown.setAttribute("role", "listbox");
+
+      function buildOptions() {
+        dropdown.innerHTML = "";
+        Array.from(select.options).forEach((opt, idx) => {
+          const isSelected = idx === select.selectedIndex;
+          const optEl = document.createElement("div");
+          optEl.className = `custom-select-option ${isSelected ? "selected" : ""}`;
+          optEl.setAttribute("role", "option");
+          optEl.setAttribute("data-value", opt.value);
+          optEl.setAttribute("aria-selected", String(isSelected));
+
+          if (isThemeSelect && THEME_SWATCHES[opt.value]) {
+            const dot = document.createElement("span");
+            dot.className = "theme-swatch-dot";
+            dot.style.background = THEME_SWATCHES[opt.value];
+            optEl.appendChild(dot);
+          }
+
+          const label = document.createElement("span");
+          label.className = "opt-label";
+          label.textContent = opt.text;
+          optEl.appendChild(label);
+
+          const check = document.createElement("span");
+          check.className = "opt-check";
+          check.innerHTML = isSelected ? ICONS.check : "";
+          optEl.appendChild(check);
+
+          optEl.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (select.value !== opt.value) {
+              select.value = opt.value;
+              select.dispatchEvent(new Event("change", { bubbles: true }));
+            }
+            closeMenu();
+            trigger.focus();
+            if (sfx.enabled) sfx.click();
+          });
+
+          dropdown.appendChild(optEl);
+        });
+      }
+
+      buildOptions();
+      wrap.appendChild(dropdown);
+
+      function openMenu() {
+        closeAllDropdowns(wrap);
+        wrap.classList.add("open");
+        dropdown.classList.remove("hidden");
+        trigger.setAttribute("aria-expanded", "true");
+
+        // Align if overflowing right viewport boundary
+        dropdown.style.left = "0";
+        dropdown.style.right = "auto";
+        const rect = dropdown.getBoundingClientRect();
+        if (rect.right > window.innerWidth - 12) {
+          dropdown.style.left = "auto";
+          dropdown.style.right = "0";
+        }
+      }
+
+      function closeMenu() {
+        wrap.classList.remove("open");
+        dropdown.classList.add("hidden");
+        trigger.setAttribute("aria-expanded", "false");
+      }
+
+      trigger.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (wrap.classList.contains("open")) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+
+      wrap.addEventListener("click", (e) => {
+        if (e.target.closest(".custom-color-box") || e.target.closest(".custom-select-dropdown")) return;
+        if (e.target !== trigger && !trigger.contains(e.target)) {
+          e.preventDefault();
+          trigger.click();
+        }
+      });
+
+      // Synchronize trigger text & options when native select changes
+      select.addEventListener("change", () => {
+        const curOpt = select.options[select.selectedIndex];
+        if (curOpt) {
+          valueSpan.textContent = curOpt.text;
+        }
+        dropdown.querySelectorAll(".custom-select-option").forEach((optEl) => {
+          const isSelected = optEl.getAttribute("data-value") === select.value;
+          optEl.classList.toggle("selected", isSelected);
+          optEl.setAttribute("aria-selected", String(isSelected));
+          const check = optEl.querySelector(".opt-check");
+          if (check) check.innerHTML = isSelected ? ICONS.check : "";
+        });
+      });
+
+      // Keyboard navigation
+      trigger.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+          e.preventDefault();
+          if (!wrap.classList.contains("open")) {
+            openMenu();
+            return;
+          }
+          const options = Array.from(dropdown.querySelectorAll(".custom-select-option"));
+          let curIdx = options.findIndex(
+            (o) => o.classList.contains("selected") || o.classList.contains("highlighted")
+          );
+          if (e.key === "ArrowDown") {
+            curIdx = (curIdx + 1) % options.length;
+          } else {
+            curIdx = (curIdx - 1 + options.length) % options.length;
+          }
+          options.forEach((o, i) => o.classList.toggle("highlighted", i === curIdx));
+          options[curIdx]?.scrollIntoView({ block: "nearest" });
+        } else if (e.key === "Enter" || e.key === " ") {
+          if (wrap.classList.contains("open")) {
+            const highlighted =
+              dropdown.querySelector(".custom-select-option.highlighted") ||
+              dropdown.querySelector(".custom-select-option.selected");
+            if (highlighted) {
+              e.preventDefault();
+              highlighted.click();
+            }
+          }
+        }
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".select-wrap")) {
+        closeAllDropdowns();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeAllDropdowns();
+      }
+    });
+  }
+
   // Boot Game
   if (dom.difficultySelect) {
     dom.difficultySelect.value = state.difficulty;
   }
+  initCustomSelects();
   startNewMatch();
 })();
