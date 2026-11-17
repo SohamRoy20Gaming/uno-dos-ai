@@ -38,16 +38,16 @@
         <label class="select-wrap" title="Table Background Color">
           <span>Background:</span>
           <select id="bgThemeSelect" aria-label="Table Background Color">
-            <option value="emerald" selected>🌲 Emerald Felt</option>
-            <option value="liquid-glass">🧊 Liquid Glass</option>
-            <option value="midnight">🌊 Midnight Blue</option>
-            <option value="crimson">🍷 Royal Crimson</option>
-            <option value="amethyst">🔮 Deep Amethyst</option>
-            <option value="charcoal">🎱 Charcoal Slate</option>
-            <option value="amber">🪵 Warm Mahogany</option>
-            <option value="ocean">🐬 Teal Ocean</option>
-            <option value="pitch-black">🌑 OLED Black</option>
-            <option value="custom">🎨 Custom Color...</option>
+            <option value="emerald" selected>Emerald Felt</option>
+            <option value="liquid-glass">Liquid Glass</option>
+            <option value="midnight">Midnight Blue</option>
+            <option value="crimson">Royal Crimson</option>
+            <option value="amethyst">Deep Amethyst</option>
+            <option value="charcoal">Charcoal Slate</option>
+            <option value="amber">Warm Mahogany</option>
+            <option value="ocean">Teal Ocean</option>
+            <option value="pitch-black">OLED Black</option>
+            <option value="custom">Custom Color...</option>
           </select>
           <div class="custom-color-box hidden" id="customColorBox" title="Custom color code (e.g. #0F3B2E, #2563EB)">
             <input type="color" id="customColorInput" value="#0f3b2e" class="custom-color-swatch" title="Pick color visually" aria-label="Custom background color picker" />
@@ -56,7 +56,11 @@
         </label>
 
         <button id="soundToggleBtn" class="icon-btn" title="Toggle Sound Effects" aria-pressed="true">
-          🔊
+          <svg class="ui-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
         </button>
         <button id="rulesBtn" class="ghost-btn">Rules</button>
         <button id="newGameBtn" class="primary-btn">New Game</button>
@@ -66,7 +70,16 @@
     <!-- Score & Status Strip -->
     <section class="status-strip">
       <div class="player-pill bot-pill" id="botScorePill">
-        <div class="avatar bot-avatar">🤖</div>
+        <div class="avatar bot-avatar" title="DOS-Bot">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+            <circle cx="12" cy="5" r="2"></circle>
+            <path d="M12 7v4"></path>
+            <line x1="8" y1="16" x2="8" y2="16"></line>
+            <line x1="16" y1="16" x2="16" y2="16"></line>
+            <path d="M9 19h6"></path>
+          </svg>
+        </div>
         <div class="pill-info">
           <div class="pill-name">
             <span id="botName">DOS-Bot</span>
@@ -97,7 +110,12 @@
             <span>Cards: <strong id="humanCardCount">7</strong></span>
           </div>
         </div>
-        <div class="avatar human-avatar">🧑</div>
+        <div class="avatar human-avatar" title="You">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
       </div>
     </section>
 
@@ -109,7 +127,14 @@
           <span class="zone-label">Bot's Hand</span>
           <div class="bot-alerts">
             <span id="botShoutBadge" class="shout-badge hidden">DOS!</span>
-            <button id="catchBotBtn" class="catch-btn hidden">🚨 Catch Bot! (+2)</button>
+            <button id="catchBotBtn" class="catch-btn hidden">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              Catch Bot! (+2)
+            </button>
           </div>
         </div>
         <div id="botHand" class="hand-row bot-hand" aria-label="Bot cards"></div>
@@ -144,7 +169,11 @@
           </div>
           <div class="action-buttons">
             <button id="undoStageBtn" class="ghost-btn hidden" title="Undo staged matches from this turn">
-              ↩ Undo
+              <svg class="btn-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+              </svg>
+              Undo
             </button>
             <button id="shoutDosBtn" class="dos-shout-btn" disabled title="Call DOS when at 2 cards">
               DOS!
@@ -162,12 +191,21 @@
           <div class="player-zone-left">
             <span class="zone-label">Your Hand</span>
             <span id="bonusBanner" class="bonus-banner hidden">
-              ✨ Color Match Bonus! Click a card to add to the Center Row.
+              <svg class="btn-icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+                <path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"></path>
+              </svg>
+              Color Match Bonus! Click a card to add to the Center Row.
             </span>
           </div>
           <div class="player-zone-tools">
             <button id="clearSelectionBtn" class="mini-btn hidden">Clear Selection</button>
-            <button id="sortHandBtn" class="mini-btn" title="Sort your hand by color and number">⇅ Sort Hand</button>
+            <button id="sortHandBtn" class="mini-btn" title="Sort your hand by color and number">
+              <svg class="btn-icon" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M7 15l5 5 5-5"></path>
+                <path d="M7 9l5-5 5 5"></path>
+              </svg>
+              Sort Hand
+            </button>
           </div>
         </div>
         <div id="playerHand" class="hand-row player-hand" aria-label="Your cards"></div>
@@ -187,7 +225,15 @@
   <!-- Round / Match Over Modal -->
   <div id="roundOverModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="roundOverTitle">
     <div class="modal-card result-modal">
-      <div class="result-emoji" id="resultEmoji">🏆</div>
+      <div class="result-emoji" id="resultEmoji">
+        <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="#FBBF24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"></path>
+          <path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"></path>
+          <path d="M6 3h12v7a6 6 0 0 1-12 0V3z"></path>
+          <path d="M12 16v4"></path>
+          <path d="M8 21h8"></path>
+        </svg>
+      </div>
       <h2 id="roundOverTitle">You Won the Round!</h2>
       <p id="roundOverSubtitle">You cleared your hand first.</p>
       <div class="score-breakdown" id="scoreBreakdown"></div>
@@ -202,7 +248,12 @@
     <div class="modal-card rules-modal">
       <div class="modal-header">
         <h2 id="rulesTitle"><img src="images/icon.png" alt="" class="modal-title-icon" /> How to Play DOS</h2>
-        <button id="closeRulesBtn" class="icon-btn" aria-label="Close rules">✕</button>
+        <button id="closeRulesBtn" class="icon-btn" aria-label="Close rules">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
       <div class="rules-body" id="rulesContentDos">
         <h3>Objective</h3>

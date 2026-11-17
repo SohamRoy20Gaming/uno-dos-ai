@@ -1,10 +1,10 @@
 # 🃏 DOS — 1v1 Tabletop Card Arena
 
 <p align="left">
-  <img src="https://img.shields.io/badge/THEME-LIQUID_GLASS_%26_CASINO_FELT-007ACC?style=for-the-badge" alt="Theme" />
-  <img src="https://img.shields.io/badge/PLATFORM-WEB_%2F_HTML5_%26_CSS3-73A800?style=for-the-badge" alt="Platform" />
-  <img src="https://img.shields.io/badge/AUDIO-PROCEDURAL_WEB_AUDIO-E65C00?style=for-the-badge" alt="Audio" />
-  <img src="https://img.shields.io/badge/BOT_AI-CASUAL_%7C_SMART_%7C_RUTHLESS-7C3AED?style=for-the-badge" alt="Bot AI" />
+  <img src="https://img.shields.io/badge/THEME-LIQUID_GLASS_%26_CASINO_FELT-007ACC?style=for-the-badge&logo=snowflake&logoColor=white" alt="Theme" />
+  <img src="https://img.shields.io/badge/PLATFORM-WEB_%2F_HTML5_%26_CSS3-73A800?style=for-the-badge&logo=html5&logoColor=white" alt="Platform" />
+  <img src="https://img.shields.io/badge/AUDIO-PROCEDURAL_WEB_AUDIO-E65C00?style=for-the-badge&logo=soundcharts&logoColor=white" alt="Audio" />
+  <img src="https://img.shields.io/badge/BOT_AI-CASUAL_%7C_SMART_%7C_RUTHLESS-7C3AED?style=for-the-badge&logo=probot&logoColor=white" alt="Bot AI" />
 </p>
 
 An authentic, modern web recreation of the official **DOS** card game (the sequel to UNO), designed as an interactive 1v1 arena with intelligent bot AI, procedural Web Audio sound synthesis, a custom theme engine, and a tactile tabletop experience.

@@ -85,6 +85,17 @@
 
   const sfx = new SoundFX();
 
+  // --- SVG Icons (No Emojis) ---
+  const ICONS = {
+    soundOn: `<svg class="ui-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>`,
+    soundOff: `<svg class="ui-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>`,
+    trophy: `<svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="#FBBF24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"></path><path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"></path><path d="M6 3h12v7a6 6 0 0 1-12 0V3z"></path><path d="M12 16v4"></path><path d="M8 21h8"></path></svg>`,
+    robotLoss: `<svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="#F87171" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" y1="15" x2="10" y2="17"></line><line x1="10" y1="15" x2="8" y2="17"></line><line x1="14" y1="15" x2="16" y2="17"></line><line x1="16" y1="15" x2="14" y2="17"></line><path d="M9 19h6"></path></svg>`,
+    sparkle: `<svg class="btn-icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true" style="vertical-align: middle; margin-right: 3px;"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"></path></svg>`,
+    check: `<svg class="btn-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align: middle; margin-right: 3px;"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
+    stagedCheck: `<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#34D399" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>`
+  };
+
   // --- DOM References ---
   const dom = {
     difficultySelect: document.getElementById("difficultySelect"),
@@ -791,7 +802,7 @@
     if (!validNow || state.humanSaidShout) return;
     state.humanSaidShout = true;
     sfx.shout();
-    showToast("DOS! ✌️", "gold");
+    showToast("DOS! Called", "gold");
     render();
   }
 
@@ -1138,7 +1149,7 @@
       state.humanScore >= 200 ||
       state.botScore >= 200;
 
-    dom.resultEmoji.textContent = winner === "human" ? "🏆" : "🤖";
+    dom.resultEmoji.innerHTML = winner === "human" ? ICONS.trophy : ICONS.robotLoss;
     if (isMatchOver) {
       dom.roundOverTitle.textContent = winner === "human" ? "You Won the Match!" : "Bot Won the Match!";
       dom.roundOverSubtitle.textContent =
@@ -1259,7 +1270,7 @@
         const overlay = document.createElement("div");
         overlay.className = "staged-overlay";
         overlay.innerHTML = `
-          <span class="check-icon">✓</span>
+          <span class="check-icon">${ICONS.stagedCheck}</span>
           <span class="staged-cards-text">${staged.playedCards.map(cardShortName).join("<br>+ ")}</span>
         `;
         btn.appendChild(overlay);
@@ -1272,10 +1283,10 @@
       if (staged) {
         tag.classList.add("matched");
         tag.textContent = staged.doubleColorBonus
-          ? "Double Color ★"
+          ? "Double Color"
           : staged.colorBonus
-          ? "Color Bonus ★"
-          : "Matched ✓";
+          ? "Color Bonus"
+          : "Matched";
       } else if (evalResult) {
         if (evalResult.doubleColorBonus) {
           tag.classList.add("color-bonus");
@@ -1285,7 +1296,7 @@
           tag.textContent = "Color Bonus! (+1 Center)";
         } else {
           tag.classList.add("valid");
-          tag.textContent = evalResult.matchType === "double" ? "Double Match ✓" : "Single Match ✓";
+          tag.textContent = evalResult.matchType === "double" ? "Double Match" : "Single Match";
         }
       } else {
         const tv = getDosTargetValue(centerCard);
@@ -1299,7 +1310,7 @@
     // Action Bar
     dom.bonusBanner.classList.toggle("hidden", state.phase !== "placeBonus");
     if (state.phase === "placeBonus") {
-      dom.bonusBanner.textContent = `✨ Color Match Bonus! Click ${state.dos.bonusesRemaining} card${state.dos.bonusesRemaining > 1 ? "s" : ""} in your hand to add to the Center Row.`;
+      dom.bonusBanner.innerHTML = `${ICONS.sparkle} Color Match Bonus! Click ${state.dos.bonusesRemaining} card${state.dos.bonusesRemaining > 1 ? "s" : ""} in your hand to add to the Center Row.`;
     }
 
     dom.clearSelectionBtn.classList.toggle("hidden", state.selectedIds.length === 0);
@@ -1336,7 +1347,7 @@
       (state.humanHand.length === 2 ||
         (isHumanTurn && state.humanHand.length === 3));
 
-    dom.shoutDosBtn.textContent = state.humanSaidShout ? "DOS! ✓" : "DOS!";
+    dom.shoutDosBtn.innerHTML = state.humanSaidShout ? `${ICONS.check} DOS!` : "DOS!";
     dom.shoutDosBtn.disabled = !canShout;
     dom.shoutDosBtn.classList.toggle("ready", canShout);
     dom.shoutDosBtn.classList.toggle("called", state.humanSaidShout);
@@ -1569,7 +1580,7 @@
 
   dom.soundToggleBtn.addEventListener("click", () => {
     sfx.enabled = !sfx.enabled;
-    dom.soundToggleBtn.textContent = sfx.enabled ? "🔊" : "🔇";
+    dom.soundToggleBtn.innerHTML = sfx.enabled ? ICONS.soundOn : ICONS.soundOff;
     dom.soundToggleBtn.setAttribute("aria-pressed", String(sfx.enabled));
     if (sfx.enabled) sfx.click();
   });
