@@ -46,15 +46,15 @@ When you are down to **2 cards** in your hand, you **must** press the glowing **
 
 - **🎨 Dynamic Table Theme & Button Engine**:
   - Switch between **9 curated table backgrounds**:
-    - 🌲 **Emerald Felt** *(Classic Casino Felt)*
-    - 🧊 **Liquid Glass** *(Frosted Glassmorphism with fluid aurora refractions)*
-    - 🌊 **Midnight Blue**
-    - 🍷 **Royal Crimson**
-    - 🔮 **Deep Amethyst**
-    - 🎱 **Charcoal Slate**
-    - 🪵 **Warm Mahogany**
-    - 🐬 **Teal Ocean**
-    - 🌑 **OLED Black**
+    - <img src="images/swatch-emerald.png" width="12" height="12" alt="" valign="middle" /> **Emerald Felt** *(Classic Casino Felt)*
+    - <img src="images/swatch-liquid-glass.png" width="12" height="12" alt="" valign="middle" /> **Liquid Glass** *(Frosted Glassmorphism with fluid aurora refractions)*
+    - <img src="images/swatch-midnight.png" width="12" height="12" alt="" valign="middle" /> **Midnight Blue**
+    - <img src="images/swatch-crimson.png" width="12" height="12" alt="" valign="middle" /> **Royal Crimson**
+    - <img src="images/swatch-amethyst.png" width="12" height="12" alt="" valign="middle" /> **Deep Amethyst**
+    - <img src="images/swatch-charcoal.png" width="12" height="12" alt="" valign="middle" /> **Charcoal Slate**
+    - <img src="images/swatch-amber.png" width="12" height="12" alt="" valign="middle" /> **Warm Mahogany**
+    - <img src="images/swatch-ocean.png" width="12" height="12" alt="" valign="middle" /> **Teal Ocean**
+    - <img src="images/swatch-pitch-black.png" width="12" height="12" alt="" valign="middle" /> **OLED Black**
   - **Custom Color Support**: Visual color picker + hex/name text box (`#0F3B2E`, `teal`, `navy`) with automatic shade derivation.
   - **Dynamic Theme-Matched Buttons & Dropdowns**: Action buttons (`New Game`, `End Turn`, `Next Round`) and topbar dropdown menus (`Bot`, `Goal`, `Background`) automatically adopt gradients, borders, backdrops, and glow shadows matching the active theme.
   - **Persistence**: Remembers your preferred background theme, difficulty, and sound settings in `localStorage`.
