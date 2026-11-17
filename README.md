@@ -1,4 +1,4 @@
-# 🃏 DOS — 1v1 Tabletop Card Arena
+# <img src="images/icon.png" width="34" height="34" alt="DOS Icon" valign="middle" style="vertical-align: middle; border-radius: 6px;" /> DOS — 1v1 Tabletop Card Arena
 
 <p align="left">
   <img src="https://img.shields.io/badge/THEME-LIQUID_GLASS_%26_CASINO_FELT-007ACC?style=for-the-badge&logo=snowflake&logoColor=white" alt="Theme" />
